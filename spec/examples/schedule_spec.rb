@@ -296,7 +296,7 @@ describe IceCube::Schedule do
     it 'should be equivalent to all_occurrences in terms of arrays' do
       schedule = IceCube::Schedule.new(Time.now, :duration => IceCube::ONE_HOUR)
       schedule.add_recurrence_rule IceCube::Rule.daily.until(Time.now + 3 * IceCube::ONE_DAY)
-      schedule.all_occurrences == schedule.all_occurrences_enumerator.to_a 
+      schedule.all_occurrences == schedule.all_occurrences_enumerator.to_a
     end
   end
 
@@ -304,7 +304,7 @@ describe IceCube::Schedule do
     it 'should be equivalent to remaining_occurrences in terms of arrays' do
       schedule = IceCube::Schedule.new(Time.now, :duration => IceCube::ONE_HOUR)
       schedule.add_recurrence_rule IceCube::Rule.daily.until(Time.now + 3 * IceCube::ONE_DAY)
-      schedule.remaining_occurrences == schedule.remaining_occurrences_enumerator.to_a 
+      schedule.remaining_occurrences == schedule.remaining_occurrences_enumerator.to_a
     end
   end
 
@@ -345,6 +345,14 @@ describe IceCube::Schedule do
       schedule = IceCube::Schedule.new
       schedule.rrule IceCube::Rule.minutely.count(3)
       schedule.rrule IceCube::Rule.daily.count(3)
+      schedule.all_occurrences.size.should == 5
+    end
+
+    it 'should consider count limits separate from exclusion rules' do
+      start_time = Time.now
+      schedule = IceCube::Schedule.new start_time
+      schedule.rrule IceCube::Rule.daily.count(5)
+      schedule.extime start_time + IceCube::ONE_DAY
       schedule.all_occurrences.size.should == 5
     end
 
