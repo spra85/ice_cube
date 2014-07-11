@@ -50,6 +50,10 @@ module IceCube
       @uses -= 1 if @uses > 0
     end
 
+    def skipped_for_excluded_time
+      @uses -= 1 if @uses > 0
+    end
+
     def dst_adjust?
       @validations[:interval].any? &:dst_adjust?
     end

@@ -452,7 +452,9 @@ module IceCube
     # is excluded from the schedule
     def exception_time?(time)
       @all_exception_rules.any? do |rule|
-        rule.on?(time, self)
+        rule.on?(time, self).tap do |time_excluded|
+          wind_back_excluded_time if time_excluded
+        end
       end
     end
 
@@ -489,6 +491,12 @@ module IceCube
     def wind_back_dst
       recurrence_rules.each do |rule|
         rule.skipped_for_dst
+      end
+    end
+
+    def wind_back_excluded_time
+      recurrence_rules.each do |rule|
+        rule.skipped_for_excluded_time
       end
     end
 
